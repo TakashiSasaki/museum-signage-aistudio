@@ -180,10 +180,10 @@ export const EditorScreen = ({
           <button
             className="editor-back-button"
             onClick={onBackToLanding}
-            aria-label="トップページに戻る"
+            aria-label="戻る"
           >
             <span>←</span>
-            <span>ポータルに戻る</span>
+            <span>戻る</span>
           </button>
           <div className="editor-brand-lockup">
             <h2 className="editor-heading">サイネージ コンテンツ管理</h2>

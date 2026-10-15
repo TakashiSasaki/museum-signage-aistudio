@@ -102,18 +102,6 @@ export const GeneralSettingsTab = ({
               placeholder="例: https://signage.museum.ehime-u.ac.jp/"
             />
           </div>
-
-          <div className="form-group">
-            <label className="form-label">
-              URL表示領域（テキスト表示）
-            </label>
-            <div className="url-display-textarea" aria-label="URLテキスト表示">
-              {general.footerUrl || 'https://signage.museum.ehime-u.ac.jp/'}
-            </div>
-            <span className="form-hint-text">
-              ※ リンクではなくプレーンテキストとして表示されます。
-            </span>
-          </div>
         </div>
 
         {/* Footer Logo Media Uploader */}

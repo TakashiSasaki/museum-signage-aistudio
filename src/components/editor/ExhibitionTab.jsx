@@ -43,7 +43,7 @@ export const ExhibitionTab = ({
     <div className="editor-tab-panel">
       <div className="tab-intro">
         <h3 className="tab-title">
-          デジタル展示 {timelineNumber}: {exhibition.title || `展示 ${timelineNumber}`}
+          デジタル展示 {timelineNumber}
         </h3>
         <p className="tab-description">
           展示用ホーム画面の選択カード情報、およびタップ時に再生される静止画シーン（シーン1）と動画シーン（シーン2）を編集します。

@@ -158,7 +158,7 @@ const LandingScreen = ({ onEnterExhibition, onEnterEditor }) => {
           <div>
             <div className="mode-card-top">
               <div className="mode-card-icon-wrapper" aria-hidden="true">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                   <polygon points="5 3 19 12 5 21 5 3"></polygon>
                 </svg>
               </div>
@@ -167,12 +167,12 @@ const LandingScreen = ({ onEnterExhibition, onEnterEditor }) => {
             <div className="mode-card-body">
               <h2 className="mode-card-title">展示用</h2>
               <p className="mode-card-desc">
-                来館者向けのスライドショー・タイムライン展示を開始します。画面右上の「全画面」ボタンからいつでも全画面表示に切り替え可能です。
+                スライドショー展示を開始。右上の「全画面」で最大化可能。
               </p>
             </div>
           </div>
           <div className="mode-card-action">
-            <span>サイネージ画面を開く</span>
+            <span>サイネージを開く</span>
             <span className="action-arrow">→</span>
           </div>
         </motion.div>
@@ -181,9 +181,9 @@ const LandingScreen = ({ onEnterExhibition, onEnterEditor }) => {
         <motion.div
           className="mode-card mode-card-editor"
           onClick={onEnterEditor}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           role="button"
@@ -199,7 +199,7 @@ const LandingScreen = ({ onEnterExhibition, onEnterEditor }) => {
           <div>
             <div className="mode-card-top">
               <div className="mode-card-icon-wrapper" aria-hidden="true">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 20h9"></path>
                   <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
                 </svg>
@@ -209,12 +209,12 @@ const LandingScreen = ({ onEnterExhibition, onEnterEditor }) => {
             <div className="mode-card-body">
               <h2 className="mode-card-title">編集用</h2>
               <p className="mode-card-desc">
-                展示タイトル・フッターや、4つのデジタル展示の静止画・動画メディア差し替え、解説テキストの編集を行います。
+                タイトル・フッターや、4つの展示の静止画・動画・解説文を編集。
               </p>
             </div>
           </div>
           <div className="mode-card-action">
-            <span>管理・編集メニューへ進む</span>
+            <span>編集メニューへ</span>
             <span className="action-arrow">→</span>
           </div>
         </motion.div>
@@ -223,7 +223,7 @@ const LandingScreen = ({ onEnterExhibition, onEnterEditor }) => {
       <div className="landing-tip-bar">
         <span className="landing-tip-icon">ℹ️</span>
         <span>
-          <strong>操作案内:</strong> 展示用モードからは、画面右上の「終了」ボタンまたはキーボードの [ESC] キーでいつでもこのトップページに戻ることができます。
+          <strong>操作案内:</strong> 展示用モードからは、右上の「終了」または [ESC] キーでいつでも戻れます。
         </span>
       </div>
     </div>
