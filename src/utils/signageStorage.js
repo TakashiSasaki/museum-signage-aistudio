@@ -11,6 +11,7 @@ export const DEFAULT_SIGNAGE_CONFIG = {
     headerSubtitle: 'コンテンツを選択してください',
     footerTagline: 'Museum of Science & Technology',
     footerCompanyName: 'NEXUS',
+    footerUrl: 'https://signage.museum.ehime-u.ac.jp/',
     footerLogo: 'museum-mark.png',
     footerQrTop: '愛媛大学ミュージアム',
     footerQrBottom: 'ポータルサイト',

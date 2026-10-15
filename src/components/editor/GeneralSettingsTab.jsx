@@ -88,6 +88,32 @@ export const GeneralSettingsTab = ({
               placeholder="例: NEXUS, EHIME UNIV MUSEUM"
             />
           </div>
+
+          <div className="form-group">
+            <label className="form-label" htmlFor="footerUrl">
+              施設・サイネージURL設定
+            </label>
+            <input
+              id="footerUrl"
+              type="text"
+              className="form-input"
+              value={general.footerUrl || ''}
+              onChange={(e) => onChange('footerUrl', e.target.value)}
+              placeholder="例: https://signage.museum.ehime-u.ac.jp/"
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">
+              URL表示領域（テキスト表示）
+            </label>
+            <div className="url-display-textarea" aria-label="URLテキスト表示">
+              {general.footerUrl || 'https://signage.museum.ehime-u.ac.jp/'}
+            </div>
+            <span className="form-hint-text">
+              ※ リンクではなくプレーンテキストとして表示されます。
+            </span>
+          </div>
         </div>
 
         {/* Footer Logo Media Uploader */}

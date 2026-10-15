@@ -620,6 +620,9 @@ function App() {
                 <h2 className="footer-company-name">
                   {config.general?.footerCompanyName || 'NEXUS'}
                 </h2>
+                {config.general?.footerUrl && (
+                  <p className="footer-url-text">{config.general.footerUrl}</p>
+                )}
               </div>
             </div>
             <div className="footer-qr-section">

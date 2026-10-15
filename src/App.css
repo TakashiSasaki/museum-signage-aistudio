@@ -70,6 +70,19 @@
   line-height: 1;
 }
 
+.footer-url-text {
+  font-size: clamp(9px, min(1.4vh, 2vw), 24px);
+  margin: 0.4vh 0 0;
+  opacity: 0.6;
+  font-family: monospace;
+  letter-spacing: 0.04em;
+  color: #090a0f;
+  user-select: text;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .footer-tagline {
   font-size: clamp(10px, min(1.8vh, 3vw), 32px);
   margin: 0;
@@ -1176,6 +1189,27 @@ html {
 .form-textarea {
   resize: vertical;
   min-height: 80px;
+}
+
+.url-display-textarea {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-family: monospace;
+  font-size: 13px;
+  color: #93c5fd;
+  word-break: break-all;
+  user-select: text;
+  line-height: 1.5;
+  cursor: text;
+}
+
+.form-hint-text {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: sans-serif;
+  margin-top: 2px;
 }
 
 /* Range Slider */
