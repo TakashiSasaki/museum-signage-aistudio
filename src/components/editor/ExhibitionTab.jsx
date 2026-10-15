@@ -39,21 +39,21 @@ export const ExhibitionTab = ({
     onChange('imageDuration', isNaN(parsed) ? 15 : Math.max(3, Math.min(120, parsed)));
   };
 
+  const fullWidthNum = String(timelineNumber).replace(/[0-9]/g, (s) =>
+    String.fromCharCode(s.charCodeAt(0) + 0xfee0)
+  );
+
   return (
     <div className="editor-tab-panel">
-      <div className="tab-intro">
-        <h3 className="tab-title">
-          デジタル展示 {timelineNumber}
-        </h3>
-        <p className="tab-description">
-          展示用ホーム画面の選択カード情報、およびタップ時に再生される静止画シーン（シーン1）と動画シーン（シーン2）を編集します。
-        </p>
-      </div>
-
       <div className="editor-form-grid">
         {/* Exhibition Card Overview */}
         <div className="form-card">
-          <h4 className="form-card-title">1. 展示基本情報（ホームカード表示）</h4>
+          <div className="card-header-badge-row">
+            <div className="card-title-lockup">
+              <span className="card-number-badge">01</span>
+              <h4 className="form-card-title">{`展示${fullWidthNum}基本情報`}</h4>
+            </div>
+          </div>
           <p className="form-card-subtitle">
             サイネージ起動直後の4分割選択画面に表示されるカード見出しと短い紹介文です。
           </p>
@@ -107,10 +107,12 @@ export const ExhibitionTab = ({
         </div>
 
         {/* Scene 1: Image Scene */}
-        <div className="form-card">
-          <div className="scene-card-badge-row">
-            <h4 className="form-card-title">2. シーン 1: 静止画展示（Ken Burns効果）</h4>
-            <span className="scene-type-tag tag-image">静止画</span>
+        <div className="form-card card-scene-image">
+          <div className="card-header-badge-row">
+            <div className="card-title-lockup">
+              <span className="card-number-badge">02</span>
+              <h4 className="form-card-title">{`展示${fullWidthNum}シーン１（静止画）`}</h4>
+            </div>
           </div>
           <p className="form-card-subtitle">
             展示選択直後に表示される高精細静止画と、長文の解説オーバーレイです。
@@ -156,10 +158,12 @@ export const ExhibitionTab = ({
         </div>
 
         {/* Scene 2: Video Scene */}
-        <div className="form-card">
-          <div className="scene-card-badge-row">
-            <h4 className="form-card-title">3. シーン 2: 映像展示（動画自動再生）</h4>
-            <span className="scene-type-tag tag-video">動画</span>
+        <div className="form-card card-scene-video">
+          <div className="card-header-badge-row">
+            <div className="card-title-lockup">
+              <span className="card-number-badge">03</span>
+              <h4 className="form-card-title">{`展示${fullWidthNum}シーン２（動画）`}</h4>
+            </div>
           </div>
           <p className="form-card-subtitle">
             静止画シーンの次に自動再生されるプロモーション映像と、タイトル・短文解説です。

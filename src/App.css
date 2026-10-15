@@ -1160,43 +1160,101 @@ html {
   line-height: 1.6;
 }
 
-/* Form Grid & Cards */
+/* Form Grid & Cards (High-Contrast with Top Accent Lines & Numbering) */
 .editor-form-grid {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 28px;
 }
 
 .form-card {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px;
-  padding: clamp(18px, 2.5vw, 28px);
+  position: relative;
+  background: linear-gradient(180deg, #161e2b 0%, #0e141f 100%);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-top: 3px solid #ffe682; /* アイディア1: 上品な上部カラーライン（ゴールド） */
+  border-radius: 12px;
+  padding: clamp(20px, 2.5vw, 28px);
   display: flex;
   flex-direction: column;
   gap: 18px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.06) inset; /* アイディア4: 背景コントラスト引き上げ & 浮揚感シャドウ */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.form-card:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.65), 0 1px 0 rgba(255, 255, 255, 0.08) inset;
+}
+
+/* シーンカードごとの識別カラーライン（静止画: ブルー / 動画: ピンク） */
+.form-card.card-scene-image {
+  border-top-color: #60a5fa;
+}
+
+.form-card.card-scene-video {
+  border-top-color: #f472b6;
+}
+
+/* カード上部の見出し・ナンバリング行 */
+.card-header-badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 2px;
+}
+
+.card-title-lockup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* アイディア1: ナンバリングバッジ (01, 02, 03) */
+.card-number-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 6px;
+  background: rgba(177, 162, 72, 0.16);
+  border: 1px solid rgba(255, 230, 130, 0.4);
+  color: #ffe682;
+  font-family: 'Shippori Mincho', serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.card-scene-image .card-number-badge {
+  background: rgba(59, 130, 246, 0.16);
+  border-color: rgba(96, 165, 250, 0.45);
+  color: #93c5fd;
+}
+
+.card-scene-video .card-number-badge {
+  background: rgba(236, 72, 153, 0.16);
+  border-color: rgba(244, 114, 182, 0.45);
+  color: #fbcfe8;
 }
 
 .form-card-title {
   margin: 0;
-  font-size: clamp(15px, 1.6vw, 19px);
+  font-size: clamp(16px, 1.6vw, 19px);
   color: #fff;
   font-weight: 700;
 }
 
 .form-card-subtitle {
-  margin: -8px 0 6px;
+  margin: -4px 0 6px;
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(255, 255, 255, 0.7);
   line-height: 1.5;
-}
-
-.scene-card-badge-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
 }
 
 .scene-type-tag {

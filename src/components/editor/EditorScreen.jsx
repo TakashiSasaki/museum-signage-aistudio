@@ -165,11 +165,11 @@ export const EditorScreen = ({
   };
 
   const tabs = [
-    { id: 'general', label: '全体', title: '全体設定（ヘッダー・フッター）' },
-    { id: 'timeline1', label: '1', title: `展示 1: ${workingConfig.exhibitions?.timeline1?.title || '宇宙・航空'}` },
-    { id: 'timeline2', label: '2', title: `展示 2: ${workingConfig.exhibitions?.timeline2?.title || 'バイオ'}` },
-    { id: 'timeline3', label: '3', title: `展示 3: ${workingConfig.exhibitions?.timeline3?.title || 'ロボティクス'}` },
-    { id: 'timeline4', label: '4', title: `展示 4: ${workingConfig.exhibitions?.timeline4?.title || 'エネルギー'}` },
+    { id: 'general', label: 'トップ', title: 'トップ設定（ヘッダー・フッター）' },
+    { id: 'timeline1', label: '展示１', title: '展示１' },
+    { id: 'timeline2', label: '展示２', title: '展示２' },
+    { id: 'timeline3', label: '展示３', title: '展示３' },
+    { id: 'timeline4', label: '展示４', title: '展示４' },
   ];
 
   return (
