@@ -753,53 +753,84 @@ html {
 }
 
 /* ==========================================================================
-   Signage Mode Exit Button (画面隅の戻るボタン)
+   Signage Mode Top Controls (画面右上の全画面 & 終了ボタン)
    ========================================================================== */
 
-.exit-exhibition-button {
+.display-top-controls {
   position: absolute;
   top: clamp(12px, 2vh, 24px);
   right: clamp(12px, 2vw, 24px);
   z-index: 120;
-  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 1.2vw, 14px);
+}
+
+.fullscreen-toggle-button,
+.exit-exhibition-button {
+  background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 999px;
   color: #fff;
-  padding: clamp(6px, 1vh, 10px) clamp(12px, 1.5vw, 20px);
+  padding: clamp(6px, 1vh, 10px) clamp(12px, 1.5vw, 18px);
   min-height: 44px;
   min-width: 44px;
   display: flex;
   align-items: center;
   gap: 8px;
   font-family: 'Shippori Mincho', serif;
-  font-size: clamp(11px, 1.3vh, 16px);
+  font-size: clamp(11px, 1.3vh, 15px);
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+  transition: background 0.25s ease, transform 0.25s ease, border-color 0.25s ease, color 0.25s ease;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.fullscreen-toggle-button {
+  background: rgba(0, 90, 200, 0.35);
+  border-color: rgba(0, 160, 255, 0.5);
+  color: #bae6fd;
+}
+
+.fullscreen-toggle-button:hover {
+  background: rgba(0, 120, 255, 0.6);
+  border-color: rgba(125, 211, 252, 0.8);
+  color: #fff;
+  transform: scale(1.04);
+}
+
+.fullscreen-toggle-button:active {
+  transform: scale(0.96);
 }
 
 .exit-exhibition-button:hover {
   background: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.5);
-  transform: scale(1.05);
+  transform: scale(1.04);
 }
 
 .exit-exhibition-button:active {
   transform: scale(0.96);
 }
 
+.control-icon,
 .exit-icon {
-  font-size: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1em;
   line-height: 1;
 }
 
+.control-text,
 .exit-text {
   letter-spacing: 0.05em;
+  white-space: nowrap;
 }
 
+.control-shortcut-hint,
 .exit-shortcut-hint {
   font-size: 0.8em;
   opacity: 0.6;

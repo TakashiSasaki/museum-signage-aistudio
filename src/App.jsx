@@ -162,17 +162,17 @@ const LandingScreen = ({ onEnterExhibition, onEnterEditor }) => {
                   <polygon points="5 3 19 12 5 21 5 3"></polygon>
                 </svg>
               </div>
-              <span className="mode-card-chip chip-exhibition">全画面展示モード</span>
+              <span className="mode-card-chip chip-exhibition">展示モード</span>
             </div>
             <div className="mode-card-body">
               <h2 className="mode-card-title">展示用</h2>
               <p className="mode-card-desc">
-                来館者向けのスライドショー・タイムライン展示を全画面表示で開始します。タッチ操作とジェスチャーによる自由な回覧が可能です。
+                来館者向けのスライドショー・タイムライン展示を開始します。画面右上の「全画面」ボタンからいつでも全画面表示に切り替え可能です。
               </p>
             </div>
           </div>
           <div className="mode-card-action">
-            <span>全画面でサイネージを開始</span>
+            <span>サイネージ画面を開く</span>
             <span className="action-arrow">→</span>
           </div>
         </motion.div>
@@ -289,23 +289,48 @@ function App() {
     setDirection(1);
   }, []);
 
-  // Enter Exhibition (Requests Fullscreen if available)
-  const handleEnterExhibition = useCallback(async () => {
+  // Fullscreen state tracking
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(Boolean(document.fullscreenElement || document.webkitFullscreenElement));
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+    };
+  }, []);
+
+  const handleToggleFullscreen = useCallback(async () => {
     try {
-      if (document.documentElement.requestFullscreen) {
-        await document.documentElement.requestFullscreen();
-      } else if (document.documentElement.webkitRequestFullscreen) {
-        await document.documentElement.webkitRequestFullscreen();
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        if (document.documentElement.requestFullscreen) {
+          await document.documentElement.requestFullscreen();
+        } else if (document.documentElement.webkitRequestFullscreen) {
+          await document.documentElement.webkitRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          await document.webkitExitFullscreen();
+        }
       }
     } catch (err) {
-      // Fullscreen might be blocked by browser iframe permissions; continue gracefully
-      console.warn('Fullscreen request bypassed:', err);
+      console.warn('Fullscreen toggle failed:', err);
     }
+  }, []);
+
+  // Enter Exhibition (Navigates to display without forcing fullscreen)
+  const handleEnterExhibition = useCallback(() => {
     goHome();
     navigate('display');
   }, [goHome, navigate]);
 
-  // Exit Exhibition (Exits Fullscreen and returns to Landing page)
+  // Exit Exhibition (Exits Fullscreen if active, and returns to Landing page)
   const handleExitExhibition = useCallback(async () => {
     try {
       if (document.fullscreenElement && document.exitFullscreen) {
@@ -444,20 +469,45 @@ function App() {
               transition={{ duration: 0.4 }}
               style={{ width: '100%', height: '100%', position: 'relative' }}
             >
-              {/* Corner exit button to return to Landing page */}
-              <button
-                className="exit-exhibition-button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleExitExhibition();
-                }}
-                title="トップページに戻る (ESC)"
-                aria-label="ランディングページに戻る"
-              >
-                <span className="exit-icon">✕</span>
-                <span className="exit-text">終了</span>
-                <span className="exit-shortcut-hint">[ESC]</span>
-              </button>
+              {/* Corner controls: Fullscreen & Exit buttons */}
+              <div className="display-top-controls">
+                <button
+                  className="fullscreen-toggle-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleToggleFullscreen();
+                  }}
+                  title={isFullscreen ? '全画面表示を解除' : '全画面表示にする'}
+                  aria-label={isFullscreen ? '全画面表示を解除' : '全画面表示にする'}
+                >
+                  <span className="control-icon">
+                    {isFullscreen ? (
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3" />
+                      </svg>
+                    ) : (
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+                      </svg>
+                    )}
+                  </span>
+                  <span className="control-text">{isFullscreen ? '全画面解除' : '全画面'}</span>
+                </button>
+
+                <button
+                  className="exit-exhibition-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleExitExhibition();
+                  }}
+                  title="トップページに戻る (ESC)"
+                  aria-label="ランディングページに戻る"
+                >
+                  <span className="exit-icon">✕</span>
+                  <span className="exit-text">終了</span>
+                  <span className="exit-shortcut-hint">[ESC]</span>
+                </button>
+              </div>
 
               <AnimatePresence mode="wait">
                 {!currentTimeline ? (
