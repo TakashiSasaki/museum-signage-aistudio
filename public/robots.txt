@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://signage.museum.ehime-u.ac.jp/sitemap.xml
