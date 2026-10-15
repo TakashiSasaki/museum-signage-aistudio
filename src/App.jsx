@@ -1,84 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGesture } from '@use-gesture/react';
+import {
+  DEFAULT_SIGNAGE_CONFIG,
+  loadSignageConfig,
+  saveSignageConfig,
+  resetSignageConfig,
+} from './utils/signageStorage';
+import { EditorScreen } from './components/editor/EditorScreen';
 import './App.css';
-
-const timelines = {
-  timeline1: [
-    {
-      id: 1,
-      type: 'image',
-      image: 'space.jpg',
-      title: '宇宙・航空事業部',
-      description: '当社の宇宙・航空事業部では、最先端の精密加工技術と新素材開発の知見を融合させ、次世代の衛星構造体やロケットエンジン部品の開発に取り組んでいます。過酷な宇宙環境に耐えうる超軽量・高強度のコンポーネントは、国内外の主要な宇宙プロジェクトで採用されており、人類のフロンティア拡大を技術で支えています。また、培った航空技術を活かし、eVTOL（空飛ぶクルマ）などの次世代都市交通インフラにおける基幹部品の供給を行い、空の移動の民主化と持続可能な空のインフラ構築に貢献しています。未来の空と宇宙を、当社の技術が繋ぎます。'
-    },
-    {
-      id: 2,
-      type: 'video',
-      video: 'Artifficial-Satellite.mp4',
-      title: '宇宙・航空事業部 - Vision',
-      description: '広大なフロンティアへ向けた、当社の挑戦。'
-    }
-  ],
-  timeline2: [
-    {
-      id: 3,
-      type: 'image',
-      image: 'bio.jpg',
-      title: 'バイオ・ライフサイエンス事業部',
-      description: '生命の神秘を工学の視点で紐解くバイオ・ライフサイエンス事業部では、ゲノム編集技術や幹細胞工学を応用した創薬支援プラットフォームの開発から、機能性新素材の創出まで幅広く手掛けています。当社の微細加工技術によって実現した高精度なバイオチップは、迅速な診断と効率的な治療計画の策定を可能にし、個別化医療の進展に寄与しています。また、バイオプラスチックや微生物を用いた環境浄化ソリューションの開発を通じて、人々の健康と地球の健全性を同時に守る「持続可能な豊かさ」の実現を目指しています。技術を通じて、生命の可能性を最大限に引き出します。'
-    },
-    {
-      id: 4,
-      type: 'video',
-      video: 'Bio_Chip_Laser_Scan_Video.mp4',
-      title: 'バイオ・ライフサイエンス - Tech',
-      description: 'ナノレベルの精密さと、生命への敬意。'
-    }
-  ],
-  timeline3: [
-    {
-      id: 5,
-      type: 'image',
-      image: 'robot.jpg',
-      title: 'AI・ロボティクス開発本部',
-      description: 'AI・ロボティクス開発本部では、ディープラーニングと高度なセンシング技術を統合し、自律的に状況を判断し行動する次世代産業用ロボットの開発を推進しています。人間と協調して働くコボット（協働ロボット）は、複雑な組立工程や物流現場での負荷を劇的に軽減し、生産性の向上と安全性の確保を高いレベルで両立させています。さらに、現場のビッグデータをリアルタイムで解析する産業用AIプラットフォームにより、故障の予兆検知やプロセスの自動最適化を実現。製造業のデジタルツイン化を強力にバックアップし、スマートファクトリーの未来を技術の力で切り拓いていきます。'
-    },
-    {
-      id: 6,
-      type: 'video',
-      video: 'Robotic_Arm_Assembling_Circuit_Board.mp4',
-      title: 'AI・ロボティクス - Innovation',
-      description: '知能と物理の融合が、産業の形を変える。'
-    }
-  ],
-  timeline4: [
-    {
-      id: 7,
-      type: 'image',
-      image: 'energy.jpg',
-      title: 'グリーンエネルギー事業推進室',
-      description: '気候変動問題の解決をミッションに掲げるグリーンエネルギー事業推進室は、再生可能エネルギーの主力電源化を目指し、次世代太陽電池や超大型風力発電機用コンポーネントの研究開発を行っています。特に、エネルギーを高効率で蓄える全固体電池技術や、水素製造・貯蔵システムの構築において、当社の触媒技術と材料工学が決定的な役割を果たしています。スマートグリッドによる電力需給の最適化ソリューションも展開し、カーボンニュートラルな社会の実現に向けたトータルエネルギーマネジメントを提供。クリーンなエネルギーが社会を巡る、循環型の未来を確かな技術力で描いています。'
-    },
-    {
-      id: 8,
-      type: 'video',
-      video: 'Solar-Panel.mp4',
-      title: 'グリーンエネルギー - Sustainable',
-      description: '地球と共生する、新しいエネルギーの循環。'
-    }
-  ],
-};
-
-// Timeline metadata for the home screen cards
-const timelineMeta = {
-  timeline1: { title: '宇宙・航空事業部', shortDesc: '次世代衛星・ロケット技術' },
-  timeline2: { title: 'バイオ・ライフサイエンス事業部', shortDesc: 'ゲノム編集・創薬支援' },
-  timeline3: { title: 'AI・ロボティクス開発本部', shortDesc: '自律型ロボット・産業AI' },
-  timeline4: { title: 'グリーンエネルギー事業推進室', shortDesc: '再生可能エネルギー技術' },
-};
-
-const DURATION = 15; // Image scene duration
 
 const variants = {
   enter: (direction) => ({
@@ -97,19 +27,21 @@ const variants = {
   }),
 };
 
-const HomeScreen = ({ onSelectTimeline }) => {
-  const timelineIds = Object.keys(timelines);
+const HomeScreen = ({ config, onSelectTimeline }) => {
+  const { general = {}, exhibitions = {} } = config || {};
+  const timelineIds = ['timeline1', 'timeline2', 'timeline3', 'timeline4'];
 
   return (
     <div className="home-screen">
       <div className="home-header">
-        <h1 className="home-title">NEXUS Signage</h1>
-        <p className="home-subtitle">コンテンツを選択してください</p>
+        <h1 className="home-title">{general.headerTitle || 'NEXUS Signage'}</h1>
+        <p className="home-subtitle">{general.headerSubtitle || 'コンテンツを選択してください'}</p>
       </div>
       <div className="timeline-cards-grid">
         {timelineIds.map((id, index) => {
-          const firstScene = timelines[id][0];
-          const meta = timelineMeta[id];
+          const exhibition = exhibitions[id];
+          if (!exhibition) return null;
+          const firstScene = exhibition.scenes && exhibition.scenes[0] ? exhibition.scenes[0] : {};
           return (
             <motion.div
               key={id}
@@ -125,8 +57,8 @@ const HomeScreen = ({ onSelectTimeline }) => {
               />
               <div className="card-play-icon" />
               <div className="card-overlay">
-                <h3 className="card-title">{meta.title}</h3>
-                <p className="card-description">{meta.shortDesc}</p>
+                <h3 className="card-title">{exhibition.title}</h3>
+                <p className="card-description">{exhibition.shortDesc}</p>
               </div>
             </motion.div>
           );
@@ -144,7 +76,6 @@ const TimelineIndicator = ({ total, current }) => (
   </div>
 );
 
-
 const SceneContent = ({ scene, active, onVideoEnd }) => {
   if (scene.type === 'video') {
     return (
@@ -154,7 +85,7 @@ const SceneContent = ({ scene, active, onVideoEnd }) => {
         autoPlay
         muted
         playsInline
-        key={scene.id}
+        key={scene.id || scene.video}
         onEnded={onVideoEnd}
       />
     );
@@ -202,9 +133,6 @@ const LandingScreen = ({ onEnterExhibition, onEnterEditor }) => {
       <div className="landing-header">
         <span className="landing-badge">EHIME UNIVERSITY MUSEUM</span>
         <h1 className="landing-title">愛媛大学ミュージアム<br />デジタルサイネージ</h1>
-        <p className="landing-subtitle">
-          地球と生命の46億年の歩み、最先端の科学技術と宇宙への挑戦を伝えるマルチメディア展示システムです。用途に応じてモードを選択してください。
-        </p>
       </div>
 
       <div className="landing-cards-container">
@@ -281,7 +209,7 @@ const LandingScreen = ({ onEnterExhibition, onEnterEditor }) => {
             <div className="mode-card-body">
               <h2 className="mode-card-title">編集用</h2>
               <p className="mode-card-desc">
-                展示タイムラインの解説テキスト編集や、静止画・動画メディアのアップロード・差し替えを行います。（機能準備中）
+                展示タイトル・フッターや、4つのデジタル展示の静止画・動画メディア差し替え、解説テキストの編集を行います。
               </p>
             </div>
           </div>
@@ -302,98 +230,40 @@ const LandingScreen = ({ onEnterExhibition, onEnterEditor }) => {
   );
 };
 
-/* ===== Editor Screen (編集用準備画面) ===== */
-const EditorScreen = ({ onBackToLanding, onLaunchExhibition }) => {
-  return (
-    <div className="editor-page">
-      <div className="editor-top-nav">
-        <button
-          className="editor-back-button"
-          onClick={onBackToLanding}
-          aria-label="トップページに戻る"
-        >
-          <span>←</span>
-          <span>ポータルに戻る</span>
-        </button>
-        <span style={{ opacity: 0.6, fontSize: '0.9rem', fontFamily: 'sans-serif' }}>
-          パス: /edit
-        </span>
-      </div>
-
-      <div className="editor-main-container">
-        <div className="editor-notice-card">
-          <div className="editor-notice-icon">⚙️</div>
-          <div className="editor-notice-content">
-            <h3>「編集用」機能の提供準備中</h3>
-            <p>
-              動画や静止画のアップロード、各タイムラインの解説テキストやタイトルの指定・編集機能を順次実装予定です。
-              現在は展示用サイネージ（/display）の動作が優先公開されています。
-            </p>
-          </div>
-        </div>
-
-        <div className="editor-sections-grid">
-          <div className="editor-preview-card">
-            <div className="editor-preview-header">
-              <h4 className="editor-preview-title">1. メディアアップローダー</h4>
-              <span className="editor-status-tag">開発予定</span>
-            </div>
-            <p className="editor-preview-desc">
-              スライドショー用静止画（.jpg, .png）および高精細映像（.mp4）の直接アップロード・プレビュー機能。
-            </p>
-            <div className="editor-mock-slot">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="17 8 12 3 7 8" />
-                <line x1="12" y1="3" x2="12" y2="15" />
-              </svg>
-              <span>メディアファイルをドラッグ＆ドロップ</span>
-            </div>
-          </div>
-
-          <div className="editor-preview-card">
-            <div className="editor-preview-header">
-              <h4 className="editor-preview-title">2. 解説テキスト・表示時間指定</h4>
-              <span className="editor-status-tag">開発予定</span>
-            </div>
-            <p className="editor-preview-desc">
-              シーンごとのタイトル、長文解説、再生秒数（デフォルト15秒）のインライン編集・保存。
-            </p>
-            <div className="editor-mock-slot">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                <polyline points="14 2 14 8 20 8" />
-                <line x1="16" y1="13" x2="8" y2="13" />
-                <line x1="16" y1="17" x2="8" y2="17" />
-              </svg>
-              <span>タイトル・解説文の指定フォーム</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="editor-actions-strip">
-          <button
-            className="editor-launch-btn"
-            onClick={onLaunchExhibition}
-          >
-            <span>展示用サイネージ（全画面）をテスト起動</span>
-            <span>→</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 function App() {
   // Routing: 'landing' (/) | 'display' (/display) | 'edit' (/edit)
   const [currentRoute, setCurrentRoute] = useState(getInitialRoute);
+
+  // Dynamic signage configuration loaded from IndexedDB
+  const [config, setConfig] = useState(DEFAULT_SIGNAGE_CONFIG);
 
   // Signage state: null = show timeline selection, 'timeline1'...'timeline4' = show scene playback
   const [currentTimeline, setCurrentTimeline] = useState(null);
   const [sceneIndex, setSceneIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [direction, setDirection] = useState(1);
+
+  // Load saved configuration on mount
+  useEffect(() => {
+    loadSignageConfig().then((loaded) => {
+      if (loaded) {
+        setConfig(loaded);
+      }
+    });
+  }, []);
+
+  // Save configuration and update state
+  const handleSaveConfig = useCallback(async (newConfig, pendingMediaFiles) => {
+    await saveSignageConfig(newConfig, pendingMediaFiles);
+    setConfig(newConfig);
+  }, []);
+
+  // Reset to clean default config
+  const handleResetToDefault = useCallback(async () => {
+    const fresh = await resetSignageConfig();
+    setConfig(fresh);
+    return fresh;
+  }, []);
 
   // Sync route with browser history
   const navigate = useCallback((route) => {
@@ -451,22 +321,22 @@ function App() {
   }, [goHome, navigate]);
 
   const changeScene = useCallback((newDirection) => {
-    if (!currentTimeline) return;
+    if (!currentTimeline || !config.exhibitions || !config.exhibitions[currentTimeline]) return;
 
-    const timeline = timelines[currentTimeline];
+    const timelineScenes = config.exhibitions[currentTimeline].scenes || [];
     const newIndex = sceneIndex + newDirection;
 
     if (newIndex < 0) {
       // At the beginning, go back to timeline selection
       goHome();
-    } else if (newIndex >= timeline.length) {
+    } else if (newIndex >= timelineScenes.length) {
       // At the end, go back to timeline selection
       goHome();
     } else {
       setSceneIndex(newIndex);
       setDirection(newDirection);
     }
-  }, [currentTimeline, sceneIndex, goHome]);
+  }, [currentTimeline, config.exhibitions, sceneIndex, goHome]);
 
   const handleNextScene = useCallback(() => changeScene(1), [changeScene]);
   const handlePrevScene = useCallback(() => changeScene(-1), [changeScene]);
@@ -518,7 +388,10 @@ function App() {
     },
   });
 
-  const currentScene = currentTimeline ? timelines[currentTimeline][sceneIndex] : null;
+  const currentExhibition = currentTimeline && config.exhibitions ? config.exhibitions[currentTimeline] : null;
+  const currentScenes = currentExhibition ? currentExhibition.scenes : [];
+  const currentScene = currentExhibition && currentScenes[sceneIndex] ? currentScenes[sceneIndex] : null;
+  const currentDuration = (currentExhibition && currentExhibition.imageDuration) || 15;
 
   return (
     <div
@@ -555,6 +428,9 @@ function App() {
               style={{ width: '100%', height: '100%' }}
             >
               <EditorScreen
+                config={config}
+                onSaveConfig={handleSaveConfig}
+                onResetToDefault={handleResetToDefault}
                 onBackToLanding={() => navigate('landing')}
                 onLaunchExhibition={handleEnterExhibition}
               />
@@ -593,7 +469,7 @@ function App() {
                     transition={{ duration: 0.4 }}
                     style={{ width: '100%', height: '100%' }}
                   >
-                    <HomeScreen onSelectTimeline={handleSelectTimeline} />
+                    <HomeScreen config={config} onSelectTimeline={handleSelectTimeline} />
                   </motion.div>
                 ) : (
                   <AnimatePresence initial={false} custom={direction}>
@@ -614,7 +490,7 @@ function App() {
                     >
                       {currentScene && (
                         <>
-                          <TimelineIndicator total={timelines[currentTimeline].length} current={sceneIndex} />
+                          <TimelineIndicator total={currentScenes.length} current={sceneIndex} />
                           <SceneContent scene={currentScene} active={!isPaused} onVideoEnd={handleNextScene} />
                           <div className="overlay">
                             <h1 className="title">{currentScene.title}</h1>
@@ -658,7 +534,7 @@ function App() {
                   {currentScene.type === 'image' && (
                     <ProgressBar
                       key={currentTimeline + '-' + sceneIndex}
-                      duration={DURATION}
+                      duration={currentDuration}
                       isPaused={isPaused}
                       onComplete={() => !isPaused && handleNextScene()}
                     />
@@ -670,34 +546,53 @@ function App() {
         </AnimatePresence>
       </div>
 
-      <div className="footer-banner">
-        <div className="footer-content">
-          <div className="footer-logo-section">
-            <img 
-              src="museum-mark.png" 
-              alt="NEXUS Logo" 
-              className="footer-logo" 
-              onClick={() => {
-                navigate('landing');
-                goHome();
-              }}
-              style={{ cursor: 'pointer' }}
-            />
-            <div>
-              <p className="footer-tagline">Museum of Science & Technology</p>
-              <h2 className="footer-company-name">NEXUS</h2>
+      {currentRoute === 'display' && (
+        <div className="footer-banner">
+          <div className="footer-content">
+            <div className="footer-logo-section">
+              <img 
+                src={config.general?.footerLogo || 'museum-mark.png'} 
+                alt="Logo" 
+                className="footer-logo" 
+                onClick={() => {
+                  navigate('landing');
+                  goHome();
+                }}
+                style={{ cursor: 'pointer' }}
+                onError={(e) => {
+                  e.target.src = 'museum-mark.png';
+                }}
+              />
+              <div>
+                <p className="footer-tagline">
+                  {config.general?.footerTagline || 'Museum of Science & Technology'}
+                </p>
+                <h2 className="footer-company-name">
+                  {config.general?.footerCompanyName || 'NEXUS'}
+                </h2>
+              </div>
+            </div>
+            <div className="footer-qr-section">
+              <p className="footer-qr-text">
+                {config.general?.footerQrTop || '愛媛大学ミュージアム'}
+              </p>
+              <img
+                src={config.general?.footerQrCode || 'qrcode.png'} 
+                alt="QR Code" 
+                className="footer-qr-code" 
+                onError={(e) => {
+                  e.target.src = 'qrcode.png';
+                }}
+              />
+              <p className="footer-qr-text">
+                {config.general?.footerQrBottom || 'ポータルサイト'}
+              </p>
             </div>
           </div>
-          <div className="footer-qr-section">
-            <p className="footer-qr-text">愛媛大学ミュージアム</p>
-            <img src="qrcode.png" alt="QR Code" className="footer-qr-code" />
-            <p className="footer-qr-text">ポータルサイト</p>
-          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
 
 export default App;
-
